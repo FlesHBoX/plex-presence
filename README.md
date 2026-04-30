@@ -51,11 +51,15 @@ Copy `config.json.example` to `config.json` and fill in your values:
 
 ### 4. Build
 
+```bash
 go build
+```
 
 To prevent the console from showing, alternatively build with;
 
+```bash
 go build -ldflags="-H windowsgui"
+```
 
 Requires [Go](https://go.dev/dl/) 1.18 or later.
 
