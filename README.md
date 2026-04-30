@@ -53,6 +53,10 @@ Copy `config.json.example` to `config.json` and fill in your values:
 
 go build
 
+To prevent the console from showing, alternatively build with;
+
+go build -ldflags="-H windowsgui"
+
 Requires [Go](https://go.dev/dl/) 1.18 or later.
 
 Place the compiled `plex-presence.exe` and `config.json` in the same directory and run.
