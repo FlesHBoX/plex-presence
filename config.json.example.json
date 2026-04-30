@@ -1,0 +1,5 @@
+{
+    "plexHost": "http://your-server-hostname:32400",
+    "plexToken": "your-plex-token-here",
+    "discordClientID": "your-discord-app-id-here"
+}
