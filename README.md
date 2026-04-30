@@ -50,3 +50,23 @@ Copy `config.json.example` to `config.json` and fill in your values:
 `config.json` is gitignored and should never be committed.
 
 ### 4. Build
+
+go build
+
+Requires [Go](https://go.dev/dl/) 1.18 or later.
+
+Place the compiled `plex-presence.exe` and `config.json` in the same directory and run.
+
+## Usage
+
+The app runs in the system tray. Right-click the tray icon for options:
+
+- **Current status** — shows what's currently playing (greyed out, read only)
+- **Launch at startup** — toggle Windows startup registration
+- **Quit** — exit the app and clear Discord presence
+
+## Notes
+
+- Playback is detected by matching your machine's hostname against active Plex sessions
+- Progress bar may be a few seconds behind actual playback due to the 5 second poll interval
+- Discord Rich Presence requires the Discord desktop client to be running
