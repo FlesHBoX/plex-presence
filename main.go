@@ -10,6 +10,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	// "time" is the standard library for durations, sleep, etc.
 	"time"
@@ -26,17 +27,40 @@ var iconData []byte
 // Constants are like PHP's define() or JS's const at module level.
 // These are compile-time values that won't change at runtime.
 const (
-	plexHost        = "http://kino:32400" // replace with your server IP
-	plexToken       = "CTBRFxV5VHykhZPT6zwq"
-	pollInterval    = 5 * time.Second       // how often to check Plex — 5 seconds
-	discordClientID = "1499228595753582612" // Discord Application ID for Rich Presence
+	pollInterval = 5 * time.Second // how often to check Plex — 5 seconds
 )
+
+// Config holds values loaded from config.json at startup.
+// This keeps sensitive values out of the source code.
+type Config struct {
+	PlexHost        string `json:"plexHost"`
+	PlexToken       string `json:"plexToken"`
+	DiscordClientID string `json:"discordClientID"`
+}
 
 // os.Hostname() returns the machine's hostname and an error.
 // If it fails for some reason we fall back to the hardcoded name.
 var playerName string
+var config Config
 
 func init() {
+	// Load config.json from the same directory as the executable
+	exePath, err := os.Executable()
+	if err != nil {
+		panic("Could not determine executable path")
+	}
+	configPath := filepath.Join(filepath.Dir(exePath), "config.json")
+
+	data, err := os.ReadFile(configPath)
+	if err != nil {
+		panic("Could not read config.json: " + err.Error())
+	}
+
+	if err := json.Unmarshal(data, &config); err != nil {
+		panic("Could not parse config.json: " + err.Error())
+	}
+
+	// Hostname detection
 	hostname, err := os.Hostname()
 	if err != nil {
 		fmt.Println("Could not detect hostname, using fallback")
@@ -169,7 +193,7 @@ func pollPlex(statusItem *systray.MenuItem) {
 	httpClient := &http.Client{Timeout: 5 * time.Second}
 
 	for {
-		url := fmt.Sprintf("%s/status/sessions?X-Plex-Token=%s", plexHost, plexToken)
+		url := fmt.Sprintf("%s/status/sessions?X-Plex-Token=%s", config.PlexHost, config.PlexToken)
 
 		req, err := http.NewRequest("GET", url, nil)
 		if err != nil {
@@ -225,7 +249,7 @@ func pollPlex(statusItem *systray.MenuItem) {
 
 			// Only login if we aren't already connected
 			if discordClient == nil {
-				c := client.NewClient(discordClientID)
+				c := client.NewClient(config.DiscordClientID)
 				if err := c.Login(); err != nil {
 					fmt.Println("Error connecting to Discord:", err)
 				} else {

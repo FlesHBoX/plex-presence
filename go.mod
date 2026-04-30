@@ -5,6 +5,7 @@ go 1.26.2
 require (
 	github.com/getlantern/systray v1.2.2
 	github.com/xeyossr/go-discordrpc v1.1.0
+	golang.org/x/sys v0.43.0
 )
 
 require (
@@ -16,6 +17,5 @@ require (
 	github.com/getlantern/ops v0.0.0-20190325191751-d70cb0d6f85f // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
-	golang.org/x/sys v0.43.0 // indirect
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
 )
